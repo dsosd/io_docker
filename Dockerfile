@@ -1,6 +1,6 @@
 FROM dsosd/mooon
 
 USER ftp
-WORKDIR /home
+WORKDIR /tmp
 
 CMD whoami
