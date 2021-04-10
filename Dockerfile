@@ -1,12 +1,13 @@
-FROM dsosd/mooon
-RUN whoami
+from dsosd/mooon:latest
 
-RUN useradd -mN -k /home/io_daemon io_daemon
+workdir /static
 
-RUN ls /static
+run chmod -R o+r /static
+run find /static -type d | xargs -I%% chmod o+x %%
 
-USER io_daemon
-WORKDIR /home/io_daemon/
+run sudo useradd -mU -k /home/io_daemon -s /bin/bash io_daemon
 
-RUN whoami
-CMD ["sleep", "3600"]
+user io_daemon
+workdir /home/io_daemon
+
+entrypoint ["whoami"]
