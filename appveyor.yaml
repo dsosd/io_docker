@@ -1,0 +1,4 @@
+image: Ubuntu
+
+build_script:
+- docker build -f main_docker .
