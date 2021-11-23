@@ -1,4 +1,4 @@
-name: Docker publish
+name: Publish docker image to GHCR
 
 on:
   push:
@@ -9,19 +9,7 @@ env:
   IMAGE_NAME: dsosd/io
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Run tests
-        run: |
-          docker build -f main_docker .
-
-  push:
-    needs: test
-
+  run:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,11 +18,14 @@ jobs:
       - name: Build image
         run: docker build -t $IMAGE_NAME -f main_docker .
 
-      - name: Log into GitHub Container Registry
-        #create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+      - name: Run tests
+        run: echo "no tests so we're ok"
+
+      - name: Login to GHCR
+        #CR_PAT is personal access token saved as a GH actions secret with `read:packages` and `write:packages` scopes
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push image to GitHub Container Registry
+      - name: Push image to GHCR
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
